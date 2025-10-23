@@ -5,3 +5,6 @@ __pycache__
 *.egg*
 node_modules/
 *.log
+
+# Model files (too large for git)
+gpt-oss-20b/
