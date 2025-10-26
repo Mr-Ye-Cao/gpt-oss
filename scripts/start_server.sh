@@ -33,9 +33,10 @@ echo ""
 vllm serve "$MODEL_PATH" \
     --host 127.0.0.1 \
     --port 8000 \
-    --max-model-len 8192 \
+    --max-model-len 32768 \
+    --served-model-name "gpt-oss-20b" \
     --gpu-memory-utilization 0.85 \
-    --max-num-batched-tokens 2048 \
+    --max-num-batched-tokens 8192 \
     --max-num-seqs 4 \
     --disable-log-requests \
     --trust-remote-code
