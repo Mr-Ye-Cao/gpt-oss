@@ -31,7 +31,7 @@ echo ""
 
 # Run vLLM directly with optimal settings
 vllm serve "$MODEL_PATH" \
-    --host 127.0.0.1 \
+    --host 0.0.0.0 \
     --port 8000 \
     --max-model-len 32768 \
     --served-model-name "gpt-oss-20b" \
