@@ -6,5 +6,10 @@ __pycache__
 node_modules/
 *.log
 
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
 # Model files (too large for git)
 gpt-oss-20b/

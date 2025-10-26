@@ -5,6 +5,11 @@ Reusable OpenAI-compatible API client for gpt-oss-20b vLLM server
 from openai import OpenAI
 from typing import List, Dict, Any, Optional, Iterator
 import json
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 class GPTOSSClient:
@@ -12,23 +17,33 @@ class GPTOSSClient:
 
     def __init__(
         self,
-        base_url: str = "http://localhost:8000/v1",
-        api_key: str = "not-needed",
-        model: str = "/home/ye/ml-experiments/gpt-oss/gpt-oss-20b"
+        base_url: Optional[str] = None,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None
     ):
         """
         Initialize the client
 
         Args:
-            base_url: Base URL of the vLLM server
-            api_key: API key (not needed for local server, but required by OpenAI client)
-            model: Model name/path
+            base_url: Base URL of the vLLM server (defaults to OPENAI_BASE_URL env var)
+            api_key: API key (defaults to OPENAI_API_KEY env var, required for authenticated server)
+            model: Model name/path (defaults to OPENAI_MODEL env var)
         """
+        # Use environment variables as defaults
+        self.base_url = base_url or os.getenv("OPENAI_BASE_URL", "http://localhost:8000/v1")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        self.model = model or os.getenv("OPENAI_MODEL", "/home/ye/ml-experiments/gpt-oss/gpt-oss-20b")
+
+        if not self.api_key:
+            raise ValueError(
+                "API key is required. Set OPENAI_API_KEY in .env file or pass api_key parameter.\n"
+                "Make sure your .env file contains: OPENAI_API_KEY=sk-gptoss-..."
+            )
+
         self.client = OpenAI(
-            base_url=base_url,
-            api_key=api_key,
+            base_url=self.base_url,
+            api_key=self.api_key,
         )
-        self.model = model
 
     def chat(
         self,
